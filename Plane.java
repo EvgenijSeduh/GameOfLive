@@ -92,8 +92,8 @@ public class Plane {
         return count;
     }
 
-    public void drawPlane(Graphics g, int width, int height) {
-        int sizeCell = (Math.min(width,height) - 80) / Math.max(this.width, this.height);
+    public void drawPlane(Graphics g, int width, int height, int sizeCell) {
+        //int sizeCell = (Math.min(width,height) - 80) / Math.max(this.width, this.height);
         for (int i = 0; i < this.height; i++) {
             for (int j = 0; j < this.width; j++) {
                 plane[i][j].drawCeil(g, i * sizeCell, j * sizeCell, sizeCell);
@@ -187,7 +187,4 @@ public class Plane {
         return width;
     }
 
-    public int getMinSize(){
-        return Math.min(width,height);
-    }
 }

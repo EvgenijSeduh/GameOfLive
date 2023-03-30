@@ -5,27 +5,35 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-public class HashArray extends ArrayList<boolean[][]> {
-        public boolean checkUniqueness() {
-            if (size() == 1) {
-                for (int i = 0; i < size()-1; i++) {
-                    if (comparison((get(size() - 1)), get(i))) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+public class HashArray extends ArrayList<Long> {
 
-        private boolean comparison(boolean[][] arr1, boolean[][] arr2){
-            for (int i = 0; i < arr1.length; i++) {
-                for (int j = 0; j < arr1[0].length; j++) {
-                    if(arr1[i][j]!=arr2[i][j]){
-                        return false;
+    public boolean checkUniqueness() {
+        if (size() == 1 || isEmpty()||indexOf(get(size()-1))==size()-1)
+            return true;
+        return false;
+    }
+
+    public static long hashCode(boolean[][] arr) {
+        int res = 0;
+        int live = 0;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                if (arr[i][j]) {
+                    live++;
+                    if ((i % 2 == 0) && (j % 2 == 0)) {
+                        res += (i + j + 2) * 5;
+                    } else if ((i % 2 == 1) && (j % 2 == 0)) {
+                        res += ((i + 1) * 7) + j + 1;
+                    } else if ((i % 2 == 0) && (j % 2 == 1)) {
+                        res += i + 1 + ((j + 1) * 11);
+                    } else {
+                        res += (i + j + 1) * 13;
                     }
+                    res *= 19;
                 }
             }
-            return true;
         }
+        return res - live;
+    }
 
 }

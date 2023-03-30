@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.HashMap;
 
 
 public class Main {
@@ -13,43 +14,41 @@ public class Main {
         HashArray history = new HashArray();
 
         System.out.println("Размер поля: ");
-        Plane plane = new Plane(in.nextInt(), in.nextInt());//(in.nextInt(),in.nextInt());
+        Plane plane = null;
+
+        try {
+            plane = new Plane(in.nextInt(), in.nextInt());
+        }catch (Exception e){
+            System.out.println("Недопустимые знвчения");
+            System.exit(0);
+        }
 
         Scene s1 = new Scene(plane);
 
-        FileManager reader = new FileManager();//Проблемма в том что после того когда мы узнаем кол-во строк то курсор в Scanner остаётся в конце, нужно все данные записать String[] и работать с массивом
+        FileManager reader = new FileManager();
         System.out.println("Введите путь к файлу: ");//C:\Users\Пользователь\Desktop\testPlane.txt
         String path = in.next();
         //FileReader fr = new FileReader("");
         FileReader fr = null;
-        while (true) {
-            try {
-                fr = new FileReader(path);
-                break;
-            } catch (Exception e) {
-                System.out.println("Файл не найден, введите путь повторно:");
-            }
+        try {
+            fr = new FileReader(path);
+        } catch (Exception e) {
+            System.out.println("Файл не найден");
+            System.exit(0);
         }
 
         System.out.println("Введите координаты куда разместить поле: ");
-        boolean[][] arr = reader.fileInArray(fr);
-        plane.setColony(in.nextInt() - 1, in.nextInt() - 1, arr);
-
+        plane.setColony(in.nextInt() - 1, in.nextInt() - 1, reader.fileInArray(fr));
 
         fr.close();
 
-
-//        s1.repaint();
-//        Thread.sleep(2000);
         while (plane.IsThereLife() && history.checkUniqueness()) {
-            history.add(plane.getColony());
+            history.add(HashArray.hashCode(plane.getColony()));
             s1.repaint();
             plane.move();
-            System.out.println("хуй");
-            Thread.sleep(100);
+            Thread.sleep(150);
         }
-        s1.gameOver();
-
-
+        System.out.println("Game Over");
+        System.exit(0);
     }
 }
